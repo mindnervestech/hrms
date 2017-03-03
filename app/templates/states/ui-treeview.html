@@ -1,0 +1,183 @@
+<div>
+<div class="portlet box portlet-yellow" ng-repeat="dept in allDepartment">
+      <div class="portlet-header">
+        <div class="caption">{{dept.name}}</div>
+        <div class="actions"><a ng-click="addFirstNode(dept)" ng-if="dept.childList.length <= 0" class="btn btn-sm btn-white"><i class="fa fa-edit"></i>&nbsp;
+            Create New Hierarchy</a></div>
+      </div>
+      <div class="portlet-body">
+        <div class="row">
+        <div class="col-lg-12" style="text-align: center;">
+          
+          <div class="family-tree-horizontal" ng-if="dept.childList.length > 0">
+            <ul>
+              <li ng-repeat="level1 in dept.childList"><a href="" ng-click="setLevelPopup(level1,dept.childList,dept)">{{level1.role.name}}</a>
+                <ul ng-if="level1.childs.length > 0">
+                  <li ng-repeat="level2 in level1.childs"><a href="" ng-click="setLevelPopup(level2,level1.childs,level1)">{{level2.role.name}}</a>
+                      <ul ng-if="level2.childs.length > 0">
+                          <li ng-repeat="level3 in level2.childs"><a href="" ng-click="setLevelPopup(level3,level2.childs,level2)">{{level3.role.name}}</a>
+                               <ul ng-if="level3.childs.length > 0">
+                                  <li ng-repeat="level4 in level3.childs"><a href="" ng-click="setLevelPopup(level4,level3.childs,level3)">{{level4.role.name}}</a>
+                                       <ul ng-if="level4.childs.length > 0">
+                                         <li ng-repeat="level5 in level4.childs"><a href="" ng-click="setLevelPopup(level5,level4.childs,level4)">{{level5.role.name}}</a>
+                                             <ul ng-if="level5.childs.length > 0">
+                                               <li ng-repeat="level6 in level5.childs"><a href="" ng-click="setLevelPopup(level6,level5.childs,level5)">{{level6.role.name}}</a>
+                                                  <ul ng-if="level6.childs.length > 0">
+                                                   <li ng-repeat="level7 in level6.childs"><a href="" ng-click="setLevelPopup(level7,level6.childs,level6)"> {{level7.role.name}}</a>
+
+                                                   </li>
+                                               </ul>
+                                               </li>
+                                           </ul>
+                                         </li>
+                                     </ul>
+                                  </li>
+                               </ul>
+                          </li>
+                      </ul>
+                  </li>
+                 
+                </ul>
+              </li>
+            </ul>
+          </div>
+           <div class="family-tree-horizontal" ng-if="dept.childList.length <= 0">
+              <span>{{dept.name}} Hierarchy not available</span>
+          </div> 
+        </div>
+        <div class="col-md-12" style="text-align: right;" ng-if="dept.childList.length > 0">
+              <label>on mouse hover you can see role Hierarchy</label>
+        </div>
+        </div>
+      </div>
+    </div>
+
+ <div class="modal fade" id="setLevelPopup" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content" style="height: 420px;">
+       <form ng-submit="setRoleLevel()" class="form-validate-signup ng-pristine ng-valid" novalidate="novalidate">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">{{department.role.name}}'s Role Hierarchy</h4>
+        </div>
+        <div class="modal-body" style="background-color: #f0f2f5;">
+            
+          <div>
+     
+        <ul id="myTab" class="nav nav-tabs">
+          <li class="active"><a data-target="#home" id="editTab" ng-click="roleLevel.editOrSave = false" data-toggle="tab" style="cursor: pointer;">Role</a></li>
+          <li><a data-target="#profile" ng-click="roleLevel.editOrSave = true" data-toggle="tab" style="cursor: pointer;">Hierarchy</a></li>
+           <li><a data-target="#permission" data-toggle="tab" style="cursor: pointer;">Permission</a></li>
+          
+        </ul>
+        <div id="myTabContent" class="tab-content" style="height: 272px;">
+          <div id="home" class="tab-pane fade in active">
+             <div class="row">
+                  <div class="form-group col-md-12"> 
+               
+                <div class="form-group col-md-4" ng-repeat="role in roleType">
+                   <input id="flat-radio-1" tabindex="15" type="radio" ng-disabled="role.isAvailableChild" ng-model="roleLevel.currentRole" value="{{role.id}}" name="flat-radio"/>&nbsp;&nbsp;
+                   <label for="flat-radio-1">{{role.name}}</label>
+               </div>
+               
+             </div>
+             
+              <div class="modal-footer" style="border-top: none;">
+              <br><br>
+                <a style="color: blue;cursor: pointer;" ng-click="deleteThisRole(department.id,'onlyNode')"><u>Remove Node Only</u></a>
+                <span>&nbsp;&nbsp;</span>
+                <a style="color: blue;cursor: pointer;" ng-click="deleteThisRole(department.id,'withChild')"><u>Remove Node With Child</u></a>
+                <span>&nbsp;&nbsp;</span>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-yellow" >Save</button>
+                
+              </div>  
+             </div>
+           
+          </div>
+          <div id="profile" class="tab-pane fade">
+            <div class="row">
+                 <div class="form-group col-md-12">
+                                
+                 
+               <div class="form-group col-md-4" ng-repeat="role in roleType"> 
+              
+                  <input id="square-checkbox-1" ng-disabled="role.isAvailableChild" ng-model="role.isAvailable" ng-change="selectRoleTypeFunction(role,role.isAvailable)" type="checkbox"/>&nbsp;&nbsp;
+                  <label for="square-checkbox-1">{{role.name}}</label>
+                </div>
+             </div> 
+             
+             
+              <div class="modal-footer" style="border-top: none;">
+              <br><br>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-yellow" >Save</button>
+                
+              </div> 
+            </div>
+               
+          </div>
+          <div id="permission" class="tab-pane fade">
+            <div class="row">
+                 <div class="form-group col-md-12">
+               <div class="form-group col-md-4" ng-repeat="permis in allPermissions"> 
+                  <input id="square-checkbox-1" ng-model="permis.isSelected" ng-change="selectedPermission(permis.isSelected,permis)" type="checkbox"/>&nbsp;&nbsp;
+                  <label for="square-checkbox-1">{{permis.name}}</label>
+                </div>
+             </div> 
+             <div class="modal-footer" style="border-top: none;">
+              <br><br>  
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-yellow" ng-click="savePermission()">Save</button>
+                
+              </div> 
+            </div>
+               
+          </div>
+          
+        </div>
+      </div>
+
+           
+            
+        </div>
+        
+         </form>
+      </div>
+      
+    </div>
+  </div>
+  <div class="modal fade" id="addFirstNodePopup" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+       <form ng-submit="setAddFirstLevel()" class="form-validate-signup ng-pristine ng-valid" novalidate="novalidate">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Level 1 Role</h4>
+        </div>
+        <div class="modal-body">
+
+            <select data-style="btn-white" title="Choose one of the following..." ng-model="roleLevel.currentRole" class="selectpicker form-control">
+                    <option ng-repeat="role in roleType" value="{{role.id}}">{{role.name}}</option>
+                    
+                  </select>
+            
+        </div>
+        <div class="modal-footer" style="border-top: none;">
+          <button type="submit" class="btn btn-yellow" >Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+         </form>
+      </div>
+      
+    </div>
+  </div>
+
+</div>
+
+
+           
